@@ -1,0 +1,6 @@
+@AfishaVoenmeh.RegistrationService.WebAPI_HostAddress = http://localhost:5176
+
+GET {{AfishaVoenmeh.RegistrationService.WebAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
