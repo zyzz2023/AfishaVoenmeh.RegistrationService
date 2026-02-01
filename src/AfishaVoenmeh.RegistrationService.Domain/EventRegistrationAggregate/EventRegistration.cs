@@ -4,7 +4,7 @@ using AfishaVoenmeh.RegistrationService.Domain.EventRegistrationAggregate.ValueO
 
 namespace AfishaVoenmeh.RegistrationService.Domain.EventRegistrationAggregate;
 
-public class EventRegistartion : AggregateRoot<Guid>
+public class EventRegistration : AggregateRoot<Guid>
 {
     public UserId UserId { get; private set; }   
     public EventId EventId { get; private set; }
@@ -12,9 +12,9 @@ public class EventRegistartion : AggregateRoot<Guid>
     public DateTime RegisteredAt { get; private set; }
     public DateTime? CanceledAt { get; private set; }
 
-    protected EventRegistartion() { } // EF Core
+    protected EventRegistration() { } // EF Core
 
-    private EventRegistartion(
+    private EventRegistration(
         UserId userId, 
         EventId eventId, 
         RegistrationStatus registrationStatus, 
@@ -29,14 +29,14 @@ public class EventRegistartion : AggregateRoot<Guid>
         CanceledAt = canceledAt;
     }
 
-    public static EventRegistartion Create(
+    public static EventRegistration Create(
         UserId userId, 
         EventId eventId, 
         RegistrationStatus registrationStatus, 
         DateTime registeredAt, 
         DateTime? canceledAt)
     {
-        return new EventRegistartion(
+        return new EventRegistration(
             userId, 
             eventId, 
             registrationStatus, 
