@@ -8,12 +8,12 @@ namespace AfishaVoenmeh.RegistrationService.Application.Features.EventRegistrati
 public class RegisterEventCommandHandler
     : IRequestHandler<RegisterEventCommand, ErrorOr<EventRegistrationDto>>
 {
-    private readonly IEventRegistrationRepository _eventRegistrationRepository;
+    //private readonly IEventRegistrationRepository _eventRegistrationRepository;
 
-    public RegisterEventCommandHandler(IEventRegistrationRepository eventRegistrationRepository)
-    {
-        _eventRegistrationRepository = eventRegistrationRepository;
-    }
+    //public RegisterEventCommandHandler(IEventRegistrationRepository eventRegistrationRepository)
+    //{
+    //    _eventRegistrationRepository = eventRegistrationRepository;
+    //}
 
     public Task<ErrorOr<EventRegistrationDto>> Handle(RegisterEventCommand command, CancellationToken cancellationToken)
     {

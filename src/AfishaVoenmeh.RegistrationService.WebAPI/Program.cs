@@ -1,5 +1,11 @@
-var builder = WebApplication.CreateBuilder(args);
+using AfishaVoenmeh.RegistrationService.Application;
+using AfishaVoenmeh.RegistrationService.Infrastructure;
 
+var builder = WebApplication.CreateBuilder(args);
+{
+    builder.Services.AddApplication();
+    builder.Services.AddInfrastructure(builder.Configuration);
+}
 // Add services to the container.
 
 builder.Services.AddControllers();

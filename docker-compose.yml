@@ -1,0 +1,16 @@
+services:
+    postgres:
+        image: postgres:16 
+        container_name: RegistrationService-PostgresContainer
+        restart: unless-stopped
+        ports:
+            - "5435:5432"
+        volumes: 
+            - registrationService_postgresData:/var/lib/postgressql/data
+        environment: 
+            POSTGRES_DB: ${POSTGRES_DB}
+            POSTGRES_USER: ${POSTGRES_USER}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
+volumes:
+    registrationService_postgresData:
