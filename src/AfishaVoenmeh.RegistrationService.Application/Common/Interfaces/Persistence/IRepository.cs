@@ -6,7 +6,7 @@ namespace AfishaVoenmeh.RegistrationService.Application.Common.Interfaces.Persis
 public interface IRepository<TEntity>
     where TEntity : class, IEntity<Guid>
 {
-    Task<TEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<TEntity?> GetByIdAsync(Guid id, bool enableTraking, CancellationToken cancellationToken = default);
     Task<IEnumerable<TEntity?>> GetAllAsync(CancellationToken cancellationToken = default);
     Task AddAsync(TEntity entity, CancellationToken cancellationToken = default);
 
