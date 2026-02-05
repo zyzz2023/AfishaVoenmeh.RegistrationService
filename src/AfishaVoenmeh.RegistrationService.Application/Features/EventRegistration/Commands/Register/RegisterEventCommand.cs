@@ -4,5 +4,5 @@ using MediatR;
 
 namespace AfishaVoenmeh.RegistrationService.Application.Features.EventRegistration.Commands.Register;
 
-public record RegisterEventCommand(Guid EventId, Guid UserId) 
+public record RegisterEventCommand(Guid EventId) 
     : IRequest<ErrorOr<EventRegistrationDto>>;

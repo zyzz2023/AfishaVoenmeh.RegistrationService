@@ -1,4 +1,7 @@
-﻿using AfishaVoenmeh.RegistrationService.WebAPI.Controllers.Common;
+﻿using AfishaVoenmeh.RegistrationService.Application.Features.EventRegistration.Commands.Register;
+using AfishaVoenmeh.RegistrationService.WebAPI.Controllers.Common;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,12 +11,21 @@ namespace AfishaVoenmeh.RegistrationService.WebAPI.Controllers;
 [ApiController]
 public class EventRegistrationsController : ApiController
 {
+    private readonly ISender _mediator;
 
-    [HttpPost("register")]
-    public IActionResult RegisterEvent()
+    public EventRegistrationsController(ISender sender)
     {
-        // Вытаскивание UserId и Role из JWT
+        _mediator = sender;
+    }
 
-        return Ok();
+    [Authorize]
+    [HttpPost("register")]
+    public async Task<IActionResult> RegisterEvent(Guid eventId)
+    {
+        var command = new RegisterEventCommand(eventId);
+
+        var result = await _mediator.Send(command);
+
+        return Ok(result);
     }
 }

@@ -9,9 +9,5 @@ public class RegisterEventCommandValidator : AbstractValidator<RegisterEventComm
         RuleFor(x => x.EventId)
             .Must(eventId => eventId != Guid.Empty)
             .WithMessage("EventId must not be empty.");
-
-        RuleFor(x => x.UserId)
-            .Must(userId => userId != Guid.Empty)
-            .WithMessage("UserId must not be empty.");
     }
 }
