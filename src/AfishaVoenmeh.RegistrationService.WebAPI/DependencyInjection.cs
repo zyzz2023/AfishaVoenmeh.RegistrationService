@@ -1,4 +1,6 @@
-﻿using Mapster;
+﻿using AfishaVoenmeh.RegistrationService.Application.Common.Mappings;
+using AfishaVoenmeh.RegistrationService.WebAPI.Common.Handlers;
+using Mapster;
 using Microsoft.OpenApi;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -13,7 +15,22 @@ public static class DependencyInjection
 
         services.AddConfiguredSwagger();
 
+        services.AddConfiguredMapster();
+
+        services.AddGlobalExceptionHandler();
+
         return services;
+    }
+
+    private static void AddConfiguredMapster(this IServiceCollection services)
+    {
+        var applicationAssembly = typeof(EventRegistrationMappingConfiguration).Assembly;
+
+        var configuration = TypeAdapterConfig.GlobalSettings;
+        configuration.Scan(applicationAssembly);
+
+        services.AddSingleton(configuration);
+        services.AddMapster();
     }
 
     private static IServiceCollection AddConfiguredSwagger(this IServiceCollection services)
@@ -55,5 +72,18 @@ public static class DependencyInjection
                 });
 
         return services;
+    }
+
+    private static void AddGlobalExceptionHandler(this IServiceCollection services)
+    {
+        services.AddExceptionHandler<GlobalExceptionHandler>();
+
+        services.AddProblemDetails(options =>
+        {
+            options.CustomizeProblemDetails = context =>
+            {
+                context.ProblemDetails.Extensions.TryAdd("requestId", context.HttpContext.TraceIdentifier);
+            };
+        });
     }
 }

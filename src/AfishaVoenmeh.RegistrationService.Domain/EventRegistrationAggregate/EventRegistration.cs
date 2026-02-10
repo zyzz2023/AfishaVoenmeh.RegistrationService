@@ -31,11 +31,12 @@ public class EventRegistration : AggregateRoot<Guid>
 
     public static EventRegistration Create(
         UserId userId, 
-        EventId eventId, 
-        RegistrationStatus registrationStatus, 
-        DateTime registeredAt, 
-        DateTime? canceledAt)
+        EventId eventId)
     {
+        var registrationStatus = RegistrationStatus.Active;
+        var registeredAt = DateTime.UtcNow;
+        var canceledAt = DateTime.MinValue;
+
         return new EventRegistration(
             userId, 
             eventId, 

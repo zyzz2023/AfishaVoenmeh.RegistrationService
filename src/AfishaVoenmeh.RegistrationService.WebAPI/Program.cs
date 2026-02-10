@@ -4,11 +4,11 @@ using AfishaVoenmeh.RegistrationService.WebAPI;
 
 var builder = WebApplication.CreateBuilder(args);
 {
-    builder.Services.AddApplication();
-    builder.Services.AddInfrastructure(builder.Configuration);
+    builder.Services
+        .AddPresentation()
+        .AddApplication()
+        .AddInfrastructure(builder.Configuration);
 }
-
-builder.Services.AddPresentation();
 
 var app = builder.Build();
 
@@ -19,6 +19,7 @@ if (app.Environment.IsDevelopment())
 }
 // Configure the HTTP request pipeline.
 
+app.UseExceptionHandler();
 app.UseHttpsRedirection();
 
 app.UseAuthentication();

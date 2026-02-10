@@ -12,6 +12,8 @@ public class EventRegistrationMappingConfiguration : IRegister
             .Map(dest => dest.EventId,
                 src => src.EventId.Value)
             .Map(dest => dest.UserId,
-                src => src.UserId.Value);
+                src => src.UserId.Value)
+            .Map(dest => dest.Status,
+                src => src.RegistrationStatus);
     }
 }

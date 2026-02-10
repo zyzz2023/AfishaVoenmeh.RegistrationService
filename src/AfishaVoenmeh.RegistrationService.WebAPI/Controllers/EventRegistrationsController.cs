@@ -20,12 +20,14 @@ public class EventRegistrationsController : ApiController
 
     [Authorize]
     [HttpPost("register")]
-    public async Task<IActionResult> RegisterEvent(Guid eventId)
+    public async Task<IActionResult> RegisterEvent(Guid eventId, CancellationToken ct)
     {
         var command = new RegisterEventCommand(eventId);
 
-        var result = await _mediator.Send(command);
+        var result = await _mediator.Send(command, ct);
 
-        return Ok(result);
+        return result.Match<IActionResult>(
+            result => Created(HttpContext.Request.Path, result),
+            errors => BadRequest(errors));
     }
 }
