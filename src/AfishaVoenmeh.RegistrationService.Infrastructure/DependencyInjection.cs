@@ -1,10 +1,13 @@
 ﻿using AfishaVoenmeh.RegistrationService.Application.Common.Interfaces.Identity;
 using AfishaVoenmeh.RegistrationService.Application.Common.Interfaces.Persistence;
+using AfishaVoenmeh.RegistrationService.Application.Common.Interfaces.Services;
 using AfishaVoenmeh.RegistrationService.Infrastructure.Authentication.Common;
 using AfishaVoenmeh.RegistrationService.Infrastructure.Data;
 using AfishaVoenmeh.RegistrationService.Infrastructure.Data.Common;
 using AfishaVoenmeh.RegistrationService.Infrastructure.Data.Repositories;
+using AfishaVoenmeh.RegistrationService.Infrastructure.Grpc;
 using AfishaVoenmeh.RegistrationService.Infrastructure.Identity;
+using AfishaVoenmeh.Shared.Contracts.Protos.Event;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -26,6 +29,8 @@ public static class DependencyInjection
         services.AddJwtBearerAuthentication(configuration);
 
         services.AddHttpContextAccessor();
+
+        services.AddGrpcServices(configuration);
 
         services.AddScoped<ICurrentUser, CurrentUser>();
         services.AddScoped<IEventRegistrationRepository, EventRegistrationRepository>();
@@ -64,5 +69,15 @@ public static class DependencyInjection
                     RoleClaimType = ClaimTypes.Role
                 };
             });
+    }
+
+    private static void AddGrpcServices(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddGrpcClient<EventCapacityService.EventCapacityServiceClient>(options =>
+        {
+            options.Address = new Uri("https://localhost:7271");
+        });
+
+        services.AddScoped<IEventCapacityGrpcService, EventCapacityGrpcService>();
     }
 }

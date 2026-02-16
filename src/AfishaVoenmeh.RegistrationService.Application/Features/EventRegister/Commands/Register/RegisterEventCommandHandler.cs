@@ -1,5 +1,6 @@
 ﻿using AfishaVoenmeh.RegistrationService.Application.Common.Interfaces.Identity;
 using AfishaVoenmeh.RegistrationService.Application.Common.Interfaces.Persistence;
+using AfishaVoenmeh.RegistrationService.Application.Common.Interfaces.Services;
 using AfishaVoenmeh.RegistrationService.Application.Features.EventRegistration.Common;
 using AfishaVoenmeh.RegistrationService.Domain.EventRegistrationAggregate.ValueObjects;
 using ErrorOr;
@@ -13,6 +14,7 @@ public class RegisterEventCommandHandler
     : IRequestHandler<RegisterEventCommand, ErrorOr<EventRegistrationDto>>
 {
     private readonly IEventRegistrationRepository _eventRegistrationRepository;
+    private readonly IEventCapacityGrpcService _eventCapacityGrpcService;
     private readonly ICurrentUser _currentUser;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
@@ -21,12 +23,14 @@ public class RegisterEventCommandHandler
         ICurrentUser currentUser,
         IUnitOfWork unitOfWork,
         IEventRegistrationRepository eventRegistrationRepository,
+        IEventCapacityGrpcService eventCapacityGrpcService,
         IMapper mapper)
     {
         _currentUser = currentUser;
         _unitOfWork = unitOfWork;
         _eventRegistrationRepository = eventRegistrationRepository;
         _mapper = mapper;
+        _eventCapacityGrpcService = eventCapacityGrpcService;
     }
 
     public async Task<ErrorOr<EventRegistrationDto>> Handle(RegisterEventCommand command, CancellationToken cancellationToken)
@@ -47,6 +51,11 @@ public class RegisterEventCommandHandler
         await _eventRegistrationRepository.AddAsync(eventRegistration, cancellationToken);
 
         // Резервирование места на мероприятии через IEventServiceClient (передать Role)
+        var grpcResult = await _eventCapacityGrpcService.ReserveSeatOnEventAsync(eventId.Value, _currentUser.Role,cancellationToken);
+        if(grpcResult.IsError)
+        {
+            return grpcResult.Errors;
+        }
 
         await _unitOfWork.SaveChangesAsync();
 
